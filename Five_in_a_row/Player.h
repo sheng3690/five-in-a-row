@@ -18,6 +18,7 @@ public:
 	void AddRobotChess(int x, int y);
 	int CheckChess(int x,int y);
 	void CheckScore();
+	void InitScoreArr();
 
 private:
 	int MaxScore = 0;
@@ -207,46 +208,87 @@ int Player::WhoWin(int x, int y) {
 		}
 	}
 }
+void Player::InitScoreArr() {
+	for (int i = 1; i <= 15; ++i) {
+		for (int j = 1; j <= 15; ++j) {
+			score[i][j] = 0;
+		}
+	}
+
+}
 void Player::CheckScore() {//评分函数
-	int dnum1 = 0; int dnum2 = 0;
+	InitScoreArr();
+	int dnum1 = 0; int dnum2 = 0; int MaxScore = 0;
 	for (int i = 1; i <= 15; ++i) {
 		for (int j = 1; j <= 15; ++j) {//扫描棋盘上的所有点
 			if (B[i][j] != ch2[0] && B[i][j] != ch2[1]) {//判断是否有子
-				
+
 				for (int l = -1; l <= 1; ++l) {
-					for (int m = -1; m <= 1; ++m) {//八个方向
+					for (int m = -1; m <= 1; ++m) {//八个方向,可改进为四个方向试试
 						if (l != 0 || m != 0) {//排除原点
 
 							for (int n = 1; n <= 4; ++n) {//再走4个子的距离
 
-								if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[0]) {//边界m
-									score[i][j] = score[i][j] + 10;
+								if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[0]) {//在该方向上第一个子若是黑子
+									dnum1 += 1;
 								}
-								else if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[1]) {//边界m
-									score[i][j] = score[i][j] - 1;
+								else if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[1]) {
+									dnum2 += 1;
+								}
+								else
+									break;
+
+							}
+							for (int n = -1; n >= -4; --n) {//走五个子的距离
+								if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[0]) {//边界m
+									dnum1 += 1;
+								}
+								else if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[1]) {
+									dnum2 += 1;
 									
 								}
 								else
 									break;
 							}
-							for (int n = -1; n >= -4; --n) {//走五个子的距离
-								if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[0]) {//边界m
-									score[i][j] = score[i][j] + 10;
-								}
-								else if (i + n*l >= 1 && i + n*l <= 15 && j + n*m >= 1 && j + n*m <= 15 && (B[i + n*l][j + n*m]) == ch2[1]) {//边界m
-									score[i][j] = score[i][j] -1;
-								}
-								else
-									break;
+							if (dnum1 == 1) {
+								score[i][j] = 10;
 							}
-
+							if (dnum1 == 2) {
+								if(dnum2==0)
+									score[i][j] = 20;
+								else
+									score[i][j] = 19;
+							}
+							if (dnum1 == 3) {
+								if (dnum2 == 0)
+									score[i][j] = 30;
+								else
+									score[i][j] = 29;
+							}
+							if (dnum1 == 4) {
+								if (dnum2 == 0)
+									score[i][j] = 40;
+								else
+									score[i][j] = 39;
+							}
+							if (dnum2 == 1) {
+								if(i<5||j<5||i>10||j>10)
+									score[i][j] = -1;
+								else
+									score[i][j] = 2;
+							}
+							if (dnum2 == 2) {
+								score[i][j] = 25;
+							}
+							dnum1 = 0;
+							dnum2 = 0;
 
 
 						}
 					}
 				}
 			}
-			
+
 		}
 	}
 	for (int i = 1; i <= 15; ++i) {
@@ -257,18 +299,14 @@ void Player::CheckScore() {//评分函数
 	}
 	for (int i = 1; i <= 15; ++i) {
 		for (int j = 1; j <= 15; ++j) {
-			if (score[i][j] == MaxScore&&B[i][j] != ch2[0] && B[i][j] != ch2[1]) {
+			if (score[i][j] == MaxScore && B[i][j] != ch2[0] && B[i][j] != ch2[1]) {
 				B[i][j] = ch2[1];
-				return ;
+				return;
 			}
-
 			
+
 		}
-	}
-	for (int i = 1; i <= 15; ++i) {
-		for (int j = 1; j <= 15; ++j) {
-			score[i][j] = 0;
-		}
+		
 	}
 }
 
