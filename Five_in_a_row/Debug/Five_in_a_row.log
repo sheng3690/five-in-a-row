@@ -1,0 +1,4 @@
+﻿  FIR_2.cpp
+d:\project\visual studio project\five_in_a_row\five_in_a_row\player.h(209): warning C4715: 'Player::WhoWin': not all control paths return a value
+  Five_in_a_row.vcxproj -> D:\project\Visual Studio Project\Five_in_a_row\Debug\Five_in_a_row.exe
+  Five_in_a_row.vcxproj -> D:\project\Visual Studio Project\Five_in_a_row\Debug\Five_in_a_row.pdb (Full PDB)
